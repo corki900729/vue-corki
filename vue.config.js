@@ -69,12 +69,12 @@ module.exports = {
     },
     configureWebpack: (config) => {
       config.resolve = {
-        //配置别名
+        //配置别名 添加文件名后缀
         extensions: ['.js','.json','.vue'],
         alias: {
           '@': path.resolve(__dirname,'./src'),
           'public': path.resolve(__dirname,'./public'),
-          'components': path.resolve(__dirname,'./src/components'),
+          '@c': path.resolve(__dirname,'./src/components'),
           'common': path.resolve(__dirname,'./src/common'),
           'api': path.resolve(__dirname,'./src/api'),
           'views': path.resolve(__dirname,'./src/views'),

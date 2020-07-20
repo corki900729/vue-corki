@@ -14,7 +14,12 @@
 
                 <el-form-item prop="password" class="item-from">
                 <label>密码</label>
-                    <el-input type="password" v-model="ruleForm.password" autocomplete="off" minlength="6" maxlength="20"></el-input>
+                    <el-input type="text" v-model="ruleForm.password" autocomplete="off" minlength="6" maxlength="20"></el-input>
+                </el-form-item>
+
+                <el-form-item prop="passwords" class="item-from" v-if="model ==='register'">
+                <label>重复密码</label>
+                    <el-input type="text" v-model="ruleForm.passwords" autocomplete="off" minlength="6" maxlength="20"></el-input>
                 </el-form-item>
                     
                 <el-form-item  prop="code" class="item-from">
@@ -36,15 +41,16 @@
     </div>
 </template>
 <script>
-import { stripscript } from "@/utils/validate.js";
+import { stripscript ,validateEmail , validatePass ,validateVCode} from "@/utils/validate.js";
 export default{
     name: "login",
     data(){
       var checkCode = (rule, value, callback) => {
-        let reg = /^[a-z0-9]{6}$/
+        this.ruleForm.code = stripscript(value);
+        value = this.ruleForm.code;
         if (!value) {
           return callback(new Error('请输入验证码'));
-        }else if(!reg.test(value)){
+        }else if(validateVCode(value)){
             return callback(new Error('验证码输入有误'));
         }else{
             return callback();
@@ -52,10 +58,9 @@ export default{
         
       };
       var validateUsername = (rule, value, callback) => {
-        let reg = /^([a-zA-Z]|[0-9])(\w|\-)+@[a-zA-Z0-9]+\.([a-zA-Z]{2,4})$/;
         if (value === '') {
           callback(new Error('请输入用户名'));
-        } else if(!reg.test(value)){
+        } else if(validateEmail(value)){
             callback(new Error('用户名格式有误'));
         }else{
           if (this.ruleForm.checkPass !== '') {
@@ -64,24 +69,49 @@ export default{
           callback();
         }
       };
+      //y验证密码
       var validatePassword = (rule, value, callback) => {
-        let reg = /^(?!\D+$)(?![^A-Za-z+$])\S{6,20}$/
+        console.log(stripscript(value))
+        //重新绑定多虑后数字
+        this.ruleForm.password = stripscript(value);
+        //重新为value负值
+        value = this.ruleForm.password;
         if (value === '') {
           callback(new Error('请输入密码'));
-        } else if (!reg.test(value)) {
+        } else if (validatePass(value)) {
           callback(new Error('密码为6-20位数字加字母!'));
+        } else {
+          callback();
+        }
+      };
+            //y验证重复密码
+      var validatePasswords = (rule, value, callback) => {
+          //如果模块职位login的话直接通过
+        if(this.model == 'login') { callback() };
+        console.log(stripscript(value))
+        //重新绑定多虑后数字
+        this.ruleForm.passwords = stripscript(value);
+        //重新为value负值
+        value = this.ruleForm.passwords;
+        if (value === '') {
+          callback(new Error('请在此输入密码'));
+        } else if (value != this.ruleForm.password) {
+          callback(new Error('重复密码不正确!'));
         } else {
           callback();
         }
       };
         return {
             menuTab: [
-                { txt: '登陆', current: true},
-                { txt: '注册', current: false}
+                { txt: '登陆', current: true , type: 'login'},
+                { txt: '注册', current: false, type: 'register'}
             ],
+            //模块的值
+            model: 'login',
             ruleForm: {
             username: '',
             password: '',
+            passwords: '',
             code: ''
             },
             rules: {
@@ -90,6 +120,9 @@ export default{
             ],
             password: [
                 { validator: validatePassword, trigger: 'blur' }
+            ],
+            passwords: [
+                { validator: validatePasswords, trigger: 'blur' }
             ],
             code: [
                 { validator: checkCode, trigger: 'blur' }
@@ -114,9 +147,10 @@ export default{
             this.menuTab.forEach(element => {
                 element.current=false;
             });
+            //高光
             data.current = true;
-
-            console.log(data)
+            //修改模块知
+            this.model = data.type;
         },
       submitForm(formName) {
         this.$refs[formName].validate((valid) => {
@@ -141,7 +175,7 @@ export default{
     background: #344a5f;
 }
 .login-warp {
-    width: 330ps;
+    width: 330px;
     margin: auto;
 }
 .meau-tab {
