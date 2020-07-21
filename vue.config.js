@@ -1,7 +1,7 @@
 const path = require('path')
 module.exports = {
     // 部署应用包时的基本 URL
-    publicPath: process.env.NODE_ENV === 'production'      ? '/vue-corki'     : '/',
+    publicPath: process.env.NODE_ENV === 'production'   ? ''     : '/',
       
     // 运行 vue-cli-service build 时生成的生产环境构建文件的目录
     // 默认构建前清除文件夹(构建时传入 --no-clean 可关闭该行为
@@ -123,6 +123,15 @@ module.exports = {
   
       // 将任何未知请求 (没有匹配到静态文件的请求) 代理到该字段指向的地方 
       proxy: null,
+      // proxy: {
+      //   '/devapi':{
+      //     target: "http://api.dcat.test/api",  //api服务器地址
+      //     changeOrigin: true,
+      //     pathRewrite: {
+      //       '^/devapi': ''
+      //     }
+      //   }
+      // },
   
       before: app => {
       },
