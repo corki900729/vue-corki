@@ -115,23 +115,24 @@ module.exports = {
   
       host: '0.0.0.0',
   
-      port: 8010,
+      port: 8080,
   
       https: false,
       hot: true,
       hotOnly: false,
   
       // 将任何未知请求 (没有匹配到静态文件的请求) 代理到该字段指向的地方 
-      proxy: null,
-      // proxy: {
-      //   '/devapi':{
-      //     target: "http://api.dcat.test/api",  //api服务器地址
-      //     changeOrigin: true,
-      //     pathRewrite: {
-      //       '^/devapi': ''
-      //     }
-      //   }
-      // },
+      // proxy: null,
+      proxy: {
+        '/devapi':{
+          target: "http://api.dcat.test/api",  //api服务器地址
+          // target: "http://www.web-jshtml.cn/productapi",
+          changeOrigin: true,
+          pathRewrite: {
+            '^/devapi': ''
+          }
+        }
+      },
   
       before: app => {
       },
