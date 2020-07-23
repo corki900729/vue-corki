@@ -26,7 +26,7 @@
                     <label>验证码</label>
                     <el-row :gutter="10">
                         <el-col :span="15">
-                            <el-input  v-model.number="ruleForm.code" minlength="6" maxlength="6"></el-input>
+                            <el-input  type="text" v-model="ruleForm.code" minlength="6" maxlength="6"></el-input>
                         </el-col>
                         <el-col :span="9">
                             <el-button type="success" @click="getSms()" :disabled="codeButtonStatus.status">{{ codeButtonStatus.text }}</el-button>
@@ -41,7 +41,9 @@
     </div>
 </template>
 <script>
-import { GetSms, Register } from "api/login";
+//base64 md5 sha1
+import sha1 from "js-sha1";
+import { GetSms, Register, Login } from "api/login";
 import { reactive, ref, isRef, onMounted } from '@vue/composition-api';
 import { stripscript ,validateEmail , validatePass ,validateVCode} from "@/utils/validate.js";
 export default{
@@ -79,7 +81,7 @@ export default{
       };
       //y验证密码
       let validatePassword = (rule, value, callback) => {
-        console.log(stripscript(value))
+        // console.log(stripscript(value))
         //重新绑定多虑后数字
         ruleForm.password = stripscript(value);
         //重新为value负值
@@ -119,7 +121,7 @@ export default{
             //模块值
         const model = ref('login');   
         //登陆按钮禁用状态
-        const loginButtonStatus = ref(true);
+        const loginButtonStatus = ref(false);
         //验证码按钮状态
         // const codeButtonStatus = ref(false);
         // const codeButtonText = ref('获取验证码');
@@ -152,7 +154,11 @@ export default{
                 { validator: checkCode, trigger: 'blur' }
             ]
             })
-        /** 生命函数 */
+        /** 生命函数 ****** 
+         * 1、尽可能在一个方法里做一件事情不要作多件不同的事情*
+         * 2、尽量吧相同的事情封装在一个方法，通过函数跳用执行
+         * 3、
+         * *****/ 
                 //vue数据驱动试图渲染 js操作dom元素
        const toggleMenu = (data => {
             //循环
@@ -163,8 +169,9 @@ export default{
             data.current = true;
             //修改模块知
             model.value = data.type;
-            //充值表单 this.$refs[formName].resetFields();2.0
+            //重置表单 this.$refs[formName].resetFields();2.0
             context.refs["loginForm"].resetFields(); //3.0c ontenx.refsloginForm.resetFields()
+            clearCountDown();//清除定时器
         });
         //提交验证码
         const getSms = ( () => {
@@ -210,32 +217,71 @@ export default{
         })
     //提交表单
       const submitForm = (formName => {
-
+//模拟注册成功
         context.refs[formName].validate((valid) => {
-          if (valid) {
-              let data = {
-                  email: ruleForm.username,
-                  password: ruleForm.password,
-                  code: ruleForm.code,
-                  module: 'register',
-                  name: ruleForm.username
-              };
-              Register(data).then( response => {
-                  let data = response.data;
-                  context.root.$message({
-                      message: data.message,
-                      type: "success"
-                  })
-                  console.log(response)
-              }).catch( error => {
-
-              });
+          if (valid) { //表单验证通过 三元 model.value === 'login' ? login() : register()
+          if(model.value === "login" ){
+              login()
+          }else{
+              register()
+          }
+ 
           } else {
             console.log('error submit!!');
             return false;
           }
         });
       }) 
+      /**
+       * 登陆
+       */
+      const login = ( () =>{
+             let data = {
+                  email: ruleForm.username,
+                  password: sha1(ruleForm.password),
+                  code: ruleForm.code,
+                  module: 'register',
+                  name: ruleForm.username
+              };
+              //登陆借口
+              Login(data).then( response => {
+
+                  let data = response.data;
+                  context.root.$message({
+                      message: data.message,
+                      type: "success"
+                  })
+                toggleMenu(menuTab[0])
+                clearCountDown(); //清楚倒计时
+              }).catch( error => {
+//s失败执行代码
+              });
+      } )
+      /**
+       * 注册
+       */
+      const register = ( () => {
+             let data = {
+                  email: ruleForm.username,
+                  password: sha1(ruleForm.password),
+                  code: ruleForm.code,
+                  module: 'register',
+                  name: ruleForm.username
+              };
+              //注册几口
+              Register(data).then( response => {
+                  let data = response.data;
+                  context.root.$message({
+                      message: data.message,
+                      type: "success"
+                  })
+                toggleMenu(menuTab[0])
+                clearCountDown(); //清楚倒计时
+                  console.log(response)
+              }).catch( error => {
+//s失败执行代码
+              });
+      } )
       /**
        *  倒计时
        */
@@ -246,6 +292,9 @@ export default{
         //     console.log('settimeout');
         // }, 1000)
         let time =num;
+        //判断定时器是否存在，存在就清除
+        if(timer.value){ clearInterval(timer.value) }
+
         timer.value = setInterval(() => {
             time--;
             if(time === 0){
@@ -258,6 +307,16 @@ export default{
             
         }, 1000)
 
+      });
+      /**
+       * 清除倒计时
+       */
+      const clearCountDown = ( () => {
+          //还原验证码按钮默认状态
+        codeButtonStatus.status = false;
+        codeButtonStatus.text = "获取验证码";
+        //清除倒计时
+        clearInterval(timer.value);
       });
         /**生命周期 */
         //挂在完成后 挂在完成后 自动执行`
