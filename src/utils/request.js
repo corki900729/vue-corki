@@ -2,7 +2,7 @@ import axios from "axios";
 import { Message } from "element-ui";
 
 //创建axios 副给变量service
-const BASEURL = process.env.NODE_ENV === "production" ? "" : "/devapi";
+const BASEURL = process.env.NODE_ENV === "production" ? "/coeki" : "/devapi";
 const service = axios.create({
   // baseURL: 'http://dcat.test/vueapi',
   // baseURL: 'http://api.dcat.test/api',
@@ -21,7 +21,6 @@ service.interceptors.request.use(
     // config.headers['Tokey'] = getToken();
     // config.headers['UserName'] = getUserName();
 
-    console.log(config.headers);
     return config;
   },
   function(error) {

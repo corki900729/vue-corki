@@ -134,8 +134,8 @@ export default{
         const timer =ref(null);
         //表单绑定数据
         const ruleForm= reactive({
-            username: '',
-            password: '',
+            username: 'corki@qq.com',
+            password: 'corki900729',
             passwords: '',
             code: ''
             })
@@ -243,19 +243,24 @@ export default{
                   module: 'register',
                   name: ruleForm.username
               };
-              //登陆借口
-              Login(data).then( response => {
-
+              context.root.$store.dispatch("app/login", data).then( response => {
                   let data = response.data;
                   context.root.$message({
                       message: data.message,
                       type: "success"
                   })
-                toggleMenu(menuTab[0])
-                clearCountDown(); //清楚倒计时
+                  //页面跳转
+            context.root.$router.push({
+                name: "Console",
+                params: {
+                    id: 1
+                }
+            });
               }).catch( error => {
 //s失败执行代码
               });
+              //登陆借口
+            //   Login(data)
       } )
       /**
        * 注册

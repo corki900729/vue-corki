@@ -1,7 +1,7 @@
 const path = require('path')
 module.exports = {
     // 部署应用包时的基本 URL
-    publicPath: process.env.NODE_ENV === 'production'   ? ''     : '/',
+    publicPath: process.env.NODE_ENV === 'production'   ? '/'     : '/',
       
     // 运行 vue-cli-service build 时生成的生产环境构建文件的目录
     // 默认构建前清除文件夹(构建时传入 --no-clean 可关闭该行为
@@ -66,12 +66,22 @@ module.exports = {
     // webpack 配置，键值对象时会合并配置，为方法时会改写配置
     // https://cli.vuejs.org/guide/webpack.html#simple-configuration
     chainWebpack: (config) => {
+      const svgRule = config.module.rule("svg");
+      svgRule.uses.clear();
+      svgRule
+      .use("svg-sprite-loader")
+      .loader("svg-sprite-loader")
+        .options({
+          symbolId: "icon-[name]",
+          include: ["./src/icons"]
+        });
     },
     configureWebpack: (config) => {
       config.resolve = {
         //配置别名 添加文件名后缀
         extensions: ['.js','.json','.vue'],
         alias: {
+          "vue": "vue/dist/vue.js",
           '@': path.resolve(__dirname,'./src'),
           'public': path.resolve(__dirname,'./public'),
           '@c': path.resolve(__dirname,'./src/components'),
