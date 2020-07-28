@@ -7,10 +7,15 @@ import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 //自定义全局组件
 import "./icons";
+//自定义全局方法
+// import global from "@/utils/global.js";
+
+
 
 import "./router/premit";
 Vue.use(ElementUI);
 Vue.use(VueCompositionApi);
+// Vue.use(global);
 
 Vue.config.productionTip = false;
 
