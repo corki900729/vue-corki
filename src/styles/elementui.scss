@@ -23,3 +23,36 @@ li.el-submenu{
         background-color: $mainColor;
     }
 }
+
+/*** table样式***/
+div.el-table {
+  td, th {
+    text-align: center;
+  }
+  th {
+    font-weight: bold;
+    color: #344a5f;
+  }
+}
+.el-table td, .el-table th {
+  text-align:center;
+}
+/**********dialog样式**/
+.el-dialog__body {
+  padding: 30px 47px !important;
+}
+.el-dialog__footer {
+  text-align: center !important;
+  padding-bottom: 50px !important;
+  .el-button {
+    width: 150px ;
+    margin: 0 11px !important;
+  }
+}
+
+div.el-form-item {margin-top: 22px;}
+.el-form {
+  .el-form-item:last-child {
+    margin-bottom: 0 !important;
+  }
+}

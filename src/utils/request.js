@@ -1,5 +1,6 @@
 import axios from "axios";
 import { Message } from "element-ui";
+import { getToken } from "@/utils/app";
 
 //创建axios 副给变量service
 const BASEURL = process.env.NODE_ENV === "production" ? "/coeki" : "/devapi";
@@ -18,7 +19,7 @@ service.interceptors.request.use(
   function(config) {
     // 在发送请求之前做些什么
     //后台需要前端这边穿的相关参数 token userid sui 业务需求 最终目的不是在请求头添加参数
-    // config.headers['Tokey'] = getToken();
+    config.headers['Authorization'] = "Bearer "+getToken();
     // config.headers['UserName'] = getUserName();
 
     return config;

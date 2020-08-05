@@ -4,11 +4,24 @@ $nacMenu: 250px;
 $nacMenuMin: 64px;
 //祝颜色
 $mainColor: #f56c6c;
-$layoutHeader: 0px;
+$layoutHeader: 75px;
 @mixin webkit($type, $value) {
     -webkit-#{$type}: $value;
     -moz-#{$type}: $value;
     -o-#{$type}: $value;
     -ms-#{$type}: $value;
     #{$type}: $value;
+}
+@mixin labelDom($align, $width, $line-height:"normal") {
+
+        label {
+            float: left;
+            line-height: $line-height + px;
+            width: $width + px;
+            text-align: $align;
+        }
+        .wrap-content {
+            margin-left: 60px;
+        }
+     
 }
