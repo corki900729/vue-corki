@@ -50,7 +50,8 @@ export function AddFirstCategory(data){
 }
 /**
  * 
- * @param {新增子集} data 
+ * @param {} data 
+ * 新增子集
  */
 export function AddChildrenCategory(data){
     return service.request({
