@@ -68,6 +68,7 @@
                     <template slot-scope="scope">
                         <el-button type="danger" size="mini" @click="deleteItem(scope.row.id)">删除</el-button>
                         <el-button type="success" size="mini" @click="editInfo(scope.row.id)">编辑</el-button>
+                        <el-button type="success" size="mini" @click="editInfo(scope.row.id)">编辑详情</el-button>
                     </template>
                 </el-table-column>
             </el-table>     
@@ -271,6 +272,7 @@ export default {
             //vue3.0
             // getInfoCategory();
             //vuex
+            console.log(options.category)
             root.$store.dispatch("common/getInfoCategory").then(response => {
                  options.category = response.data.data;
                 // console.log(response);
