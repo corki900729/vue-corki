@@ -1,6 +1,6 @@
 <template>
                 <!-- 新增弹窗 -->
-        <el-dialog title="新增" :visible.sync="dialog_info_flag" @close="close" width="580px" @open="openDialog">
+        <el-dialog title="修改" :visible.sync="dialog_info_flag" @close="close" width="580px" @open="openDialog">
               <el-form :model="form" ref="addInfoForm">
 
                 <el-form-item label="类型" :label-width="formLabelWidth" prop="category">
@@ -29,9 +29,9 @@
 </template>
 <script>
 import { ref, reactive, watch} from '@vue/composition-api';
-import { AddInfo } from "@/api/news";
+import { AddInfo, GetList, EditInfo  } from "@/api/news";
 export default {
-    name: "dialogInfo",
+    name: "dialogEditInfo",
         //父组件向子组件是单向数据流 不能反向修改
     props: {
         flag: {
@@ -41,6 +41,10 @@ export default {
         category: {
             type: Array,
             default: () => []
+        },
+        id: {
+            type: String,
+            default: ''
         }
     },
     setup(props, { root, emit, refs  }){
@@ -65,10 +69,25 @@ export default {
         }
         const openDialog = () => {
             categoryOption.item = props.category;
+            getInfo();
 
+        }
+        const getInfo = () => {
+            let requestData = {
+                pageNumber: 1,
+                pageSize: 1,
+                id: props.id
+            }
+            GetList(requestData).then(response => {
+                let responseData = response.data.data.data[0];
+                form.category = responseData.category;
+                form.title = responseData.title;
+                form.content = responseData.content;
+            })
         }
         const submit = () => {
             let requestData = {
+                id: props.id,
                 category: form.category,
                 title: form.title,
                 content: form.content
@@ -81,18 +100,18 @@ export default {
                 return false;
             }
             submitLoading.value = true;
-            AddInfo(requestData).then( response => {
+            EditInfo(requestData).then( response => {
                 root.$message({
                     message: response.data.message,
                     type: 'success'
                 })
+                //修改成功两种刷新数据方式 1、暴力性，直接刷新借口 2、返回列表，手动修改制定的数据
+                emit("getListEmit");//emit调用父组件方法                
                 submitLoading.value = false;
-                //chongzhi
-                refs['addInfoForm'].resetFields();
-                console.log(response.data)
+
+                // refs['addInfoForm'].resetFields();
             }).catch( error => {
                 submitLoading.value = false;
-                console.log(error)
             })
         }
         return {

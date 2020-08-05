@@ -9,10 +9,13 @@ export function global(){
             type: params.type ||'warning',
             center: true
         }).then(() => {
-            params.fn && params.fn(params.id);
+            //确定
+            params.fn && params.fn(params.id || "");
             // console.log(params.fn())
             
         }).catch(() => {
+            //取消
+            params.catchFn && params.catchFn();
             // root.$message({
             //     type: 'info',
             //     message: '已取消删除'

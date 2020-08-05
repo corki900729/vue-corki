@@ -8,6 +8,7 @@ export default {
                 type: params.type ||'warning',
                 center: true
             }).then(() => {
+                console.log(params)
                 params.fn && params.fn(params.id);
                 // console.log(params.fn())
                 
@@ -18,5 +19,6 @@ export default {
                 // });
             });
         }
+        
     }
 }
