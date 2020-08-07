@@ -9,3 +9,15 @@
 .black-space-30 {
     height: 30px;
 }
+@for $i from 1 through 110 {
+    .margin-left-#{$i} {
+        margin-left: (1px * $i);
+    }
+
+    // .padding-top-#{$i} {
+    //     padding-top: (1px * $i);
+    // }
+    // .padding-bottom-#{$i} {
+    //     padding-bottom: (1px * $i);
+    // }
+}
