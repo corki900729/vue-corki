@@ -73,8 +73,17 @@ const routes = [
           icon: "el-icon-s-marketing",
         },
         component: () => import("../views/Info/category.vue"),
+      },
+      {
+        path: "/infoDetaild",
+        name: "InfoDetaild",
+        hidden: true,
+        meta: {
+          name: "信息详情",
+          icon: "el-icon-s-marketing",
+        },
+        component: () => import("../views/Info/detailed.vue"),
       }
-
     ]
   },
   /**

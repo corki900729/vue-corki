@@ -68,6 +68,9 @@
                     <template slot-scope="scope">
                         <el-button type="danger" size="mini" @click="deleteItem(scope.row.id)">删除</el-button>
                         <el-button type="success" size="mini" @click="editInfo(scope.row.id)">编辑</el-button>
+                        <!-- <router-link :to="{ name: 'InfoDetaild' , query: {id: scope.row.id } }" class="margin-left-10"> -->
+                            <el-button type="success" size="mini" @click="detailed(scope.row)" >编辑详情</el-button>
+                        <!-- </router-link> -->
                     </template>
                 </el-table-column>
             </el-table>     
@@ -173,6 +176,35 @@ export default {
             dialog_info_edit.value = true;
 
         }
+        /**
+         *  详情页
+         */
+        const detailed = (data) => {
+        //  root.$store.commit("infoDetailed/SET_ID", data.id);
+        //  root.$store.commit("infoDetailed/SET_TITLE", data.title);           
+         root.$store.commit("infoDetailed/UPDATE_STATE_VALUE", {
+             id: {
+                 value: data.id,
+                 sessionKey: "infoId",
+                 session :true
+             },
+             title: {
+                 value: data.title,
+                 sessionKey: "infoTitle",
+                 session: true
+             }
+         });           
+            // root.$router.push({
+            //     path: `/InfoDetaild/${data.id}/${data.title}`
+            // })
+            root.$router.push({
+                name: 'InfoDetaild',
+                params: {
+                    id: data.id,
+                    title: data.title
+                }
+            })
+        }
         const getList = () => {
             let requestData = formatData();
             loadingData.value = true;
@@ -223,7 +255,6 @@ export default {
         }
         const confirmDelete = (value) => {
             DeleteInfo({id: deleteInfoId.value}).then( response => {
-                console.log(response);
                 deleteInfoId.value = '';
                 root.$message({
                     message: response.data.message,
@@ -271,6 +302,7 @@ export default {
             //vue3.0
             // getInfoCategory();
             //vuex
+            console.log(options.category)
             root.$store.dispatch("common/getInfoCategory").then(response => {
                  options.category = response.data.data;
                 // console.log(response);
@@ -284,6 +316,7 @@ export default {
         return {
             options,category_value,data_value,searchOption,search_key,search_keywork,tableData,dialog_info, total,loadingData,dialog_info_edit, infoId,
             handleSizeChange,handleCurrentChange,closeDialog, deleteItem, deleteAll, toData, toCategory, handleSelectionChange, search, editInfo, getList
+            , detailed
             
 
         }
