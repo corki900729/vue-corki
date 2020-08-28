@@ -6,8 +6,7 @@ Vue.use(VueRouter);
 
 import Layout from "@/views/Layout";
 
-
-export const defaultRouterMap = [
+const routes = [
   {
     path: "/",
     redirect: "/login",
@@ -48,35 +47,11 @@ export const defaultRouterMap = [
       }
     ]
   },
-  //404
-  {
-    path: "/page404",
-    meta: {
-      name: "404",
-      icon: "el-icon-eleme",
-    },
-    hidden:true,
-    component: Layout,
-    children: [
-      {
-        path: "/404",
-        meta: {
-          name: "首页",
-          icon: "el-icon-phone",
-        },
-        component: () => import("../views/404.vue"),
-      }
-    ]
-  },
-];
-//动态路由
-export  const asnycRouterMap = [
   {
     path: "/info",
     name: "Info",
     meta: {
       name: "信息管理",
-      system: ["userSystem"],      
       icon: "el-icon-star-off",
     },
     component: Layout,
@@ -85,8 +60,6 @@ export  const asnycRouterMap = [
         path: "/infoIndex",
         name: "InfoIndex",
         meta: {
-          system: ["userSystem"],  
-          keepAlive: true,        
           name: "信息列表",
           icon: "el-icon-s-platform",
         },
@@ -97,8 +70,6 @@ export  const asnycRouterMap = [
         name: "InfoCategory",
         meta: {
           name: "信息分类",
-          keepAlive: true,   
-          system: [], 
           icon: "el-icon-s-marketing",
         },
         component: () => import("../views/Info/category.vue"),
@@ -109,8 +80,6 @@ export  const asnycRouterMap = [
         hidden: true,
         meta: {
           name: "信息详情",
-          keepAlive: true,  
-          system: ["userSystem"], 
           icon: "el-icon-s-marketing",
         },
         component: () => import("../views/Info/detailed.vue"),
@@ -125,7 +94,6 @@ export  const asnycRouterMap = [
     name: "User",
     meta: {
       name: "用户管理",
-      system: ["userSystem"], 
       icon: "el-icon-loading",
     },
     component: Layout,
@@ -142,16 +110,11 @@ export  const asnycRouterMap = [
       
 
     ]
-  },  
-  {
-    path: "*",
-    redirect: "/404",
-    hidden: true
-  }
+  },
 ];
 
 const router = new VueRouter({
-  routes:defaultRouterMap,
+  routes,
 });
 
 export default router;

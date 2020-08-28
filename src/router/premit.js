@@ -13,12 +13,30 @@ router.beforeEach( (to, from, next) => {
             store.commit("app/SET_USERNAME", "");
             next();
         }else{
-            next();
+            //获取用户的角色 动态分配路由权限
+            /**1、什么时候处理动态路由
+             * 2、什么条件处理
+             */
+            if(store.getters['app/roles'].length === 0){
+                store.dispatch("permission/getRoles").then( response=>{
+                    let roles = response;
+                    // let button = response.button;
+                    store.commit("app/SET_ROLES", roles);
+                    store.dispatch("permission/createRouter", roles).then( response => {
+                        let addRouter = store.getters['permission/addRouters'];
+                        let allRouters = store.getters['permission/allRouters'];
+                        router.addRoutes(addRouter);//添加动态路由
+                        //路由更新
+                        router.options.routes = allRouters ;
+                        next({...to, replace:true}); //
+                    })
+                } );
+            }else{
+                next();
+            }
         }
-        console.log('存在');
     }else{
         if(whiteRouter.indexOf(to.path) !== -1){//当前路由在白名单内
-            console.log(111);
 
             next();
         }else{

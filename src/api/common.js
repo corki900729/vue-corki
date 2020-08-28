@@ -30,3 +30,25 @@ export function QiNiuToken(data){
         data
     })
 }
+
+export function loadTableData(params){
+    return service.request({
+        method: params.method || "post",
+        url: params.url,
+        data: params.data || {}
+    })
+}
+/**
+ * 获取省市区关联
+ * @param {
+ * 
+ * 
+ * } data 
+ */
+export function GetCityPicker(data){
+    return service.request({
+        method: 'post',
+        url: "/cityPicker/",
+        data
+    })
+}

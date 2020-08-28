@@ -5,15 +5,15 @@ import { Cookie } from "js-cookie";
 import { getUsername } from "@/utils/app";
 const state = {
   isCollapse: JSON.parse(sessionStorage.getItem('isCollapse')) || false,
-
+  roles: [],
   token: "",
-  username: getUsername() || ""
+  username: getUsername() || "",
 }
 
 const getters = {
   isCollapse: state => state.isCollapse,
   username: state => state.username,
-
+  roles: state => state.roles,
 }
 
 const mutations= {//必须的同步 没有回调处理事情
@@ -32,7 +32,11 @@ const mutations= {//必须的同步 没有回调处理事情
         },
         REMOVE_TOKEN(state){
             state.token = "";
-        }
+        },
+        SET_ROLES(state, value){
+          state.roles = value;
+          // console.log(state)
+      },
       }
 const actions= {//可以回调处理hi事情
   login(content, data){
@@ -40,9 +44,7 @@ const actions= {//可以回调处理hi事情
     return new Promise( (resolve, reject) => {
         //接口
         Login(data).then( (response) => {
-          console.log(response)
           let data =response.data.token
-          console.log(content);
           content.commit('SET_TOKEN', data.access_token);
           content.commit('SET_USERNAME', data.username);
           setToken(data.access_token);
@@ -62,6 +64,7 @@ const actions= {//可以回调处理hi事情
         removeUsername();
         commit("SET_TOKEN", "");
         commit("SET_USERNAME", "");
+        commit("SET_ROLES", []);
         resolve();
       } )
 

@@ -66,6 +66,7 @@
                 <el-table-column prop="user" label="管理员"></el-table-column>
                 <el-table-column label="操作">
                     <template slot-scope="scope">
+                        <el-button type="danger" size="mini" v-btnPerm="'info:del'">自定义</el-button>
                         <el-button type="danger" size="mini" @click="deleteItem(scope.row.id)">删除</el-button>
                         <el-button type="success" size="mini" @click="editInfo(scope.row.id)">编辑</el-button>
                         <!-- <router-link :to="{ name: 'InfoDetaild' , query: {id: scope.row.id } }" class="margin-left-10"> -->

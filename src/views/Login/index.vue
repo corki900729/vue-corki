@@ -140,19 +140,19 @@ export default{
             code: ''
             })
             //表单的验证
-            const    rules= reactive({
-            username: [
-                { validator: validateUsername, trigger: 'blur' }
-            ],
-            password: [
-                { validator: validatePassword, trigger: 'blur' }
-            ],
-            passwords: [
-                { validator: validatePasswords, trigger: 'blur' }
-            ],
-            code: [
-                { validator: checkCode, trigger: 'blur' }
-            ]
+        const rules= reactive({
+                username: [
+                    { validator: validateUsername, trigger: 'blur' }
+                ],
+                password: [
+                    { validator: validatePassword, trigger: 'blur' }
+                ],
+                passwords: [
+                    { validator: validatePasswords, trigger: 'blur' }
+                ],
+                code: [
+                    { validator: checkCode, trigger: 'blur' }
+                ]
             })
         /** 生命函数 ****** 
          * 1、尽可能在一个方法里做一件事情不要作多件不同的事情*
@@ -220,11 +220,11 @@ export default{
 //模拟注册成功
         context.refs[formName].validate((valid) => {
           if (valid) { //表单验证通过 三元 model.value === 'login' ? login() : register()
-          if(model.value === "login" ){
-              login()
-          }else{
-              register()
-          }
+            if(model.value === "login" ){
+                login()
+            }else{
+                register()
+            }
  
           } else {
             console.log('error submit!!');
@@ -282,7 +282,6 @@ export default{
                   })
                 toggleMenu(menuTab[0])
                 clearCountDown(); //清楚倒计时
-                  console.log(response)
               }).catch( error => {
 //s失败执行代码
               });

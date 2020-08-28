@@ -37,7 +37,7 @@
         </el-form>
 </template>
 <script>
-import { ref, onMounted, reactive } from '@vue/composition-api';
+import { ref, onMounted, reactive, onActivated } from '@vue/composition-api';
 import { QiNiuToken } from "@/api/common"
 import { AddInfo, GetList, EditInfo  } from "@/api/news";
 import { timestampToTime } from "@/utils/common";
@@ -126,7 +126,12 @@ export default {
 
         onMounted( () => {
             getInfoCategory();
+            console.log('mounte')
+        })
+        onActivated( () => {
+            data.id = root.$route.params.id || root.$store.getters["infoDetailed/infoId"];
             getInfo();
+            console.log('active')
         })
 
         return {

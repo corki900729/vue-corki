@@ -45,3 +45,10 @@ export function Register(data) {
     //data: data 左边的是后台接受的 右边的data是接受的参数，如果两个是同名的可以写成一个
   });
 }
+export function getUserRoles(data={}){
+  return service.request({
+    method: "post",
+    url: "/userRole/",
+    data
+  })
+}
